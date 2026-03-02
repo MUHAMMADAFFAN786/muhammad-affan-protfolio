@@ -2,10 +2,16 @@ import { useState } from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+const getSupabaseClient = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    throw new Error('Missing Supabase configuration');
+  }
+
+  return createClient(url, key);
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -39,6 +45,7 @@ const Contact = () => {
     setIsLoading(true);
 
     try {
+      const supabase = getSupabaseClient();
       const { error: insertError } = await supabase.from('contacts').insert([
         {
           name: formData.name.trim(),
@@ -55,7 +62,9 @@ const Contact = () => {
         setIsSubmitted(false);
       }, 4000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+      setError(errorMessage);
+      console.error('Contact form error:', err);
     } finally {
       setIsLoading(false);
     }
