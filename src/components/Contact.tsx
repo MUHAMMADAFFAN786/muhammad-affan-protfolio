@@ -1,17 +1,5 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-
-const getSupabaseClient = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  if (!url || !key) {
-    throw new Error('Missing Supabase configuration');
-  }
-
-  return createClient(url, key);
-};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -45,16 +33,27 @@ const Contact = () => {
     setIsLoading(true);
 
     try {
-      const supabase = getSupabaseClient();
-      const { error: insertError } = await supabase.from('contacts').insert([
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit_contact`,
         {
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          message: formData.message.trim(),
-        },
-      ]);
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            message: formData.message.trim(),
+          }),
+        }
+      );
 
-      if (insertError) throw insertError;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
 
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
