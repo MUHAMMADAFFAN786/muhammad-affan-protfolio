@@ -33,26 +33,40 @@ const Contact = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit_contact`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            message: formData.message.trim(),
-          }),
-        }
-      );
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-      const data = await response.json();
+      if (!supabaseUrl || !anonKey) {
+        throw new Error('Supabase configuration missing');
+      }
+
+      const functionUrl = `${supabaseUrl}/functions/v1/submit_contact`;
+
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${anonKey}`,
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim(),
+        }),
+      });
+
+      const contentType = response.headers.get('content-type');
+      let data;
+
+      if (contentType?.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Unexpected response: ${text}`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
+        throw new Error(data?.error || data?.details || `Request failed with status ${response.status}`);
       }
 
       setIsSubmitted(true);
@@ -61,9 +75,26 @@ const Contact = () => {
         setIsSubmitted(false);
       }, 4000);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+      let errorMessage = 'Failed to send message';
+      let isNetworkError = false;
+
+      if (err instanceof TypeError) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          isNetworkError = true;
+          errorMessage = 'Unable to reach the message service. Please try again or contact me directly.';
+        } else {
+          errorMessage = 'Network error - please check your connection';
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
       setError(errorMessage);
-      console.error('Contact form error:', err);
+      console.error('Contact form error:', {
+        message: errorMessage,
+        isNetworkError,
+        originalError: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setIsLoading(false);
     }
