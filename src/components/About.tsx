@@ -1,103 +1,176 @@
-import { GraduationCap, Code, Database, Brain, Wrench } from 'lucide-react';
+import { GraduationCap, Code, Brain, Database, Wrench, Cpu, Layers } from 'lucide-react';
+import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
-const About = () => {
-  const skills = {
-    Languages: ['Python', 'Java', 'C++/C', 'HTML', 'CSS'],
-    'Frameworks & Libraries': [
-      'PyTorch',
-      'FastAPI',
-      'TensorFlow',
-      'SciKit-Learn',
-      'Pandas',
-      'NumPy',
-      'Matplotlib',
-      'Seaborn',
-      'Plotly',
-      'Keras',
-      'Flask',
-      'XGBoost',
-      'OpenCV',
-      'pyttsx3',
-    ],
-    Databases: ['MySQL', 'MongoDB'],
-    'AI/ML & Data': ['LLM Fine-Tuning', 'Prompt Engineering'],
-    'Tools & Platforms': ['Git', 'UiPath', 'Microsoft Power Platform'],
-  };
+const Counter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
 
-  const skillIcons: Record<string, JSX.Element> = {
-    Languages: <Code className="w-6 h-6" />,
-    'Frameworks & Libraries': <Brain className="w-6 h-6" />,
-    Databases: <Database className="w-6 h-6" />,
-    'AI/ML & Data': <Brain className="w-6 h-6" />,
-    'Tools & Platforms': <Wrench className="w-6 h-6" />,
-  };
+  useEffect(() => {
+    if (inView) {
+      const controls = animate(count, value, { duration: 1.8, ease: 'easeOut' });
+      return controls.stop;
+    }
+  }, [inView, value, count]);
 
   return (
-    <section id="about" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
-          <p className="text-cyan-600 font-semibold mb-2">01 — ABOUT</p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Transforming research into real world AI solutions
-          </h2>
-        </div>
+    <span ref={ref} className="text-4xl font-extrabold gradient-text">
+      <motion.span>{rounded}</motion.span>
+      {suffix}
+    </span>
+  );
+};
 
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              I'm a Computer Science and Engineering student with specialization in Artificial Intelligence
+const skills = {
+  'Programming Languages': {
+    icon: <Code className="w-5 h-5" />,
+    accent: 'from-primary to-primary-light',
+    items: ['Python', 'Java', 'C++', 'SQL', 'HTML', 'CSS', 'JavaScript'],
+  },
+  'Machine Learning & AI': {
+    icon: <Brain className="w-5 h-5" />,
+    accent: 'from-secondary to-secondary-light',
+    items: [
+      'TensorFlow', 'Keras', 'Scikit-learn', 'PyTorch', 'Pandas', 'NumPy',
+      'OpenCV', 'CNN', 'Deep Learning', 'Computer Vision', 'Prompt Engineering',
+      'LLM Fine-Tuning', 'XGBoost', 'FastAPI', 'Flask', 'Matplotlib', 'Seaborn', 'Plotly',
+    ],
+  },
+  Databases: {
+    icon: <Database className="w-5 h-5" />,
+    accent: 'from-success to-success-light',
+    items: ['MySQL', 'MongoDB Atlas', 'Supabase'],
+  },
+  'Tools & Platforms': {
+    icon: <Wrench className="w-5 h-5" />,
+    accent: 'from-primary-light to-secondary',
+    items: ['Git', 'GitHub', 'VS Code', 'IntelliJ IDEA', 'Google Colab', 'Jupyter Notebook', 'UiPath', 'Microsoft Power Platform'],
+  },
+};
+
+const About = () => {
+  return (
+    <section id="about" className="relative py-24 bg-ink-900 overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="mb-14"
+        >
+          <p className="text-primary-light font-semibold mb-2 tracking-widest text-sm">01 — ABOUT</p>
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
+            Transforming research into <span className="gradient-text">real-world AI</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-10 mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-lg text-slate-300 leading-relaxed mb-5">
+              I'm a Computer Science and Engineering student specializing in Artificial Intelligence
               and Machine Learning at COER University, with a passion for creating intelligent, scalable
               solutions that make a real impact.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-slate-300 leading-relaxed">
               My experience spans from fine-tuning Large Language Models to architecting AI-driven systems
-              that scale to thousands of users. I thrive at the intersection of Artificial Intelligence and
-              software engineering, where groundbreaking research transforms into impactful, real-world solutions.
+              that scale to thousands of users. I thrive at the intersection of AI and software engineering,
+              where groundbreaking research transforms into impactful, real-world solutions.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="bg-cyan-100 p-3 rounded-lg">
-                <GraduationCap className="w-8 h-8 text-cyan-600" />
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="glass rounded-[20px] p-8 shadow-soft hover:shadow-glow transition-shadow"
+          >
+            <div className="flex items-start gap-4">
+              <div className="bg-gradient-to-br from-primary to-secondary p-3 rounded-xl glow-blue">
+                <GraduationCap className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-1">COER University</h3>
-                <p className="text-gray-700 font-medium">
-                  Computer Science & Engineering With (AIML)
-                </p>
-                <p className="text-gray-500 mt-1">2024 - 2028</p>
+                <h3 className="text-xl font-bold text-white mb-1">COER University</h3>
+                <p className="text-slate-200 font-medium">Computer Science &amp; Engineering (AI &amp; ML)</p>
+                <p className="text-slate-400 mt-1 text-sm">2024 — 2028</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <span className="px-3 py-1 rounded-full bg-primary/15 text-primary-light text-xs font-medium">AI & ML Specialization</span>
+                  <span className="px-3 py-1 rounded-full bg-secondary/15 text-secondary-light text-xs font-medium">Deep Learning</span>
+                </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        <div>
-          <h3 className="text-3xl font-bold text-gray-900 mb-8">TECHNICAL EXPERTISE</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(skills).map(([category, items]) => (
-              <div
+        {/* Counters */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20"
+        >
+          {[
+            { label: 'Projects', value: 5, icon: <Layers className="w-5 h-5" />, accent: 'text-primary-light' },
+            { label: 'Internships', value: 2, icon: <Cpu className="w-5 h-5" />, accent: 'text-secondary-light' },
+            { label: 'Technologies', value: 30, suffix: '+', icon: <Code className="w-5 h-5" />, accent: 'text-success-light' },
+            { label: 'Years Learning', value: 2, suffix: '+', icon: <Brain className="w-5 h-5" />, accent: 'text-primary-light' },
+          ].map((stat) => (
+            <div key={stat.label} className="glass rounded-2xl p-6 text-center hover:scale-[1.03] transition-transform">
+              <div className={`flex justify-center mb-2 ${stat.accent}`}>{stat.icon}</div>
+              <Counter value={stat.value} suffix={stat.suffix} />
+              <p className="text-slate-400 text-sm mt-1 font-medium">{stat.label}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+        >
+          <h3 className="text-3xl font-bold text-white mb-8 tracking-tight">Technical Expertise</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {Object.entries(skills).map(([category, data], idx) => (
+              <motion.div
                 key={category}
-                className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-shadow"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                className="glass rounded-[20px] p-6 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="text-cyan-600">{skillIcons[category]}</div>
-                  <h4 className="font-bold text-gray-900">{category}</h4>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`bg-gradient-to-br ${data.accent} p-2.5 rounded-xl text-white`}>
+                    {data.icon}
+                  </div>
+                  <h4 className="font-bold text-white text-lg">{category}</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {items.map((skill) => (
+                  {data.items.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
+                      className="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-200 text-sm rounded-full hover:bg-primary/20 hover:border-primary/40 hover:text-white transition-all cursor-default"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
