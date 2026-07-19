@@ -1,6 +1,7 @@
 import { GraduationCap, Code, Brain, Database, Wrench, Cpu, Layers } from 'lucide-react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
+import SupabaseIcon from './icons/SupabaseIcon';
 
 const Counter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -41,7 +42,11 @@ const skills = {
   Databases: {
     icon: <Database className="w-5 h-5" />,
     accent: 'from-success to-success-light',
-    items: ['MySQL', 'MongoDB Atlas', 'Supabase'],
+    items: [
+      'MySQL',
+      'MongoDB Atlas',
+      { label: 'Supabase Studio', icon: <SupabaseIcon className="w-3.5 h-3.5" /> },
+    ] as Array<string | { label: string; icon: ReactNode }>,
   },
   'Tools & Platforms': {
     icon: <Wrench className="w-5 h-5" />,
@@ -158,14 +163,19 @@ const About = () => {
                   <h4 className="font-bold text-white text-lg">{category}</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {data.items.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-200 text-sm rounded-full hover:bg-primary/20 hover:border-primary/40 hover:text-white transition-all cursor-default"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {data.items.map((skill) => {
+                    const isObj = typeof skill !== 'string';
+                    const label = isObj ? skill.label : skill;
+                    return (
+                      <span
+                        key={label}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 text-slate-200 text-sm rounded-full hover:bg-primary/20 hover:border-primary/40 hover:text-white transition-all cursor-default"
+                      >
+                        {isObj && skill.icon}
+                        {label}
+                      </span>
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}

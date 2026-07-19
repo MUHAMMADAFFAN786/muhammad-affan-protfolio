@@ -1,5 +1,6 @@
-import { Briefcase, MapPin, Calendar, Rocket, Wrench } from 'lucide-react';
+import { MapPin, Calendar, Rocket, Wrench } from 'lucide-react';
 import { motion } from 'framer-motion';
+import CompanyLogo from './CompanyLogo';
 
 const experiences = [
   {
@@ -18,6 +19,7 @@ const experiences = [
     ],
     stack: ['Python', 'TensorFlow', 'Scikit-learn', 'Git', 'GitHub', 'Machine Learning'],
     accent: 'from-secondary to-secondary-light',
+    logoSrc: undefined, // Replace with official FlyRank AI logo URL when available
   },
   {
     role: 'AI/ML Trainee Intern',
@@ -35,6 +37,7 @@ const experiences = [
     ],
     stack: ['C++', 'SQL', 'DSA', 'OOP', 'Debugging', 'Problem Solving', 'Database Design'],
     accent: 'from-primary to-primary-light',
+    logoSrc: undefined, // Replace with official Explorin Academy logo URL when available
   },
 ];
 
@@ -77,9 +80,7 @@ const Experience = () => {
 
               <div className="glass rounded-[20px] p-8 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all">
                 <div className="flex items-start gap-4 mb-5">
-                  <div className={`bg-gradient-to-br ${exp.accent} p-3 rounded-xl text-white`}>
-                    <Briefcase className="w-6 h-6" />
-                  </div>
+                  <CompanyLogo name={exp.company} src={exp.logoSrc} />
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
                     <p className="text-lg font-semibold gradient-text mb-3">{exp.company}</p>
