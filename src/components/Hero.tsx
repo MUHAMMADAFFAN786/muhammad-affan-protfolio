@@ -1,4 +1,4 @@
-import { Github, Linkedin, MessageCircle, Sparkles } from 'lucide-react';
+import { Github, Linkedin, MessageCircle, Sparkles, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -116,13 +116,25 @@ const Hero = () => {
               Muhammad <span className="gradient-text">Affan</span>
             </h1>
 
-            <div className="h-9 mb-6">
+            <div className="h-9 mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-200">
                 {typed}
                 <span className="inline-block w-1 h-6 ml-1 bg-primary-light animate-pulse align-middle" />
               </h2>
             </div>
-            <p className="text-sm text-slate-400 font-medium mb-6">B.Tech Computer Science (AI &amp; ML) — COER University</p>
+            <p className="text-sm text-slate-400 font-medium mb-6 flex items-center gap-1.5">
+              B.Tech Computer Science (AI &amp; ML) —
+              <a
+                href="https://coeruniversity.ac.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-slate-300 hover:text-primary-light underline-offset-2 hover:underline transition-colors"
+              >
+                COER University
+                <ExternalLink size={12} className="opacity-70" />
+              </a>
+              <span className="block w-full text-xs text-slate-500 mt-1">Roorkee, Uttarakhand, India</span>
+            </p>
 
             <p className="text-base sm:text-lg text-slate-300 mb-9 max-w-2xl leading-relaxed">
               Passionate AI &amp; Machine Learning Engineer focused on building intelligent systems using
@@ -147,7 +159,7 @@ const Hero = () => {
                 href="https://github.com/MUHAMMADAFFAN786"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary flex items-center gap-2 glass text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all"
+                className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-900 hover:scale-105 hover:shadow-lg transition-all"
               >
                 <Github size={18} />
                 GitHub
@@ -156,7 +168,8 @@ const Hero = () => {
                 href="https://linkedin.com/in/muhammad-affan-25aa533fb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary flex items-center gap-2 glass text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all"
+                className="flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold hover:scale-105 hover:shadow-lg transition-all"
+                style={{ background: '#0A66C2' }}
               >
                 <Linkedin size={18} />
                 LinkedIn
@@ -167,7 +180,7 @@ const Hero = () => {
                   e.preventDefault();
                   document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="btn-primary flex items-center gap-2 glass text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all"
+                className="btn-primary flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:shadow-glow hover:scale-105 transition-all"
               >
                 <MessageCircle size={18} />
                 Contact Me

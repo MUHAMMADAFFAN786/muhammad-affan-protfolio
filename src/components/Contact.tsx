@@ -50,10 +50,14 @@ const Contact = () => {
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setStatus('idle'), 4000);
-    } catch (err) {
-      setStatus('error');
-      setErrorMsg('Could not send the message right now. Please email me directly at malikaffan67802@gmail.com');
-      console.error('Contact form error:', err);
+    } catch {
+      // Graceful fallback: never expose technical errors to visitors
+      const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
+      const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
+      window.location.href = `mailto:malikaffan67802@gmail.com?subject=${subject}&body=${body}`;
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setStatus('idle'), 4000);
     }
   };
 

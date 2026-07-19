@@ -1,7 +1,8 @@
-import { GraduationCap, Code, Brain, Database, Wrench, Cpu, Layers } from 'lucide-react';
+import { Code, Brain, Database, Wrench, Cpu, Layers, ExternalLink } from 'lucide-react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useEffect, useRef, ReactNode } from 'react';
-import SupabaseIcon from './icons/SupabaseIcon';
+import { useEffect, useRef } from 'react';
+import TechBadge from './TechBadge';
+import CoerLogo from './logos/CoerLogo';
 
 const Counter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -42,11 +43,7 @@ const skills = {
   Databases: {
     icon: <Database className="w-5 h-5" />,
     accent: 'from-success to-success-light',
-    items: [
-      'MySQL',
-      'MongoDB Atlas',
-      { label: 'Supabase Studio', icon: <SupabaseIcon className="w-3.5 h-3.5" /> },
-    ] as Array<string | { label: string; icon: ReactNode }>,
+    items: ['MySQL', 'MongoDB Atlas', 'Supabase Studio'],
   },
   'Tools & Platforms': {
     icon: <Wrench className="w-5 h-5" />,
@@ -101,12 +98,25 @@ const About = () => {
             className="glass rounded-[20px] p-8 shadow-soft hover:shadow-glow transition-shadow"
           >
             <div className="flex items-start gap-4">
-              <div className="bg-gradient-to-br from-primary to-secondary p-3 rounded-xl glow-blue">
-                <GraduationCap className="w-7 h-7 text-white" />
+              <div className="flex-shrink-0 glass-strong rounded-2xl p-1.5 hover:scale-105 transition-transform">
+                <CoerLogo size={56} />
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-white mb-1">COER University</h3>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white mb-1">
+                  <a
+                    href="https://coeruniversity.ac.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-primary-light transition-colors"
+                  >
+                    COER University
+                    <ExternalLink size={14} className="opacity-70" />
+                  </a>
+                </h3>
                 <p className="text-slate-200 font-medium">Computer Science &amp; Engineering (AI &amp; ML)</p>
+                <p className="text-slate-400 mt-1 text-sm flex items-center gap-1">
+                  Roorkee, Uttarakhand, India
+                </p>
                 <p className="text-slate-400 mt-1 text-sm">2024 — 2028</p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   <span className="px-3 py-1 rounded-full bg-primary/15 text-primary-light text-xs font-medium">AI & ML Specialization</span>
@@ -163,19 +173,9 @@ const About = () => {
                   <h4 className="font-bold text-white text-lg">{category}</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {data.items.map((skill) => {
-                    const isObj = typeof skill !== 'string';
-                    const label = isObj ? skill.label : skill;
-                    return (
-                      <span
-                        key={label}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 text-slate-200 text-sm rounded-full hover:bg-primary/20 hover:border-primary/40 hover:text-white transition-all cursor-default"
-                      >
-                        {isObj && skill.icon}
-                        {label}
-                      </span>
-                    );
-                  })}
+                  {data.items.map((skill) => (
+                    <TechBadge key={skill} name={skill} />
+                  ))}
                 </div>
               </motion.div>
             ))}

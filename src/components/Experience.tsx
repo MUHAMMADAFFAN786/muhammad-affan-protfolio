@@ -1,6 +1,7 @@
 import { MapPin, Calendar, Rocket, Wrench } from 'lucide-react';
 import { motion } from 'framer-motion';
-import CompanyLogo from './CompanyLogo';
+import FlyRankLogo from './logos/FlyRankLogo';
+import ExplorinLogo from './logos/ExplorinLogo';
 
 const experiences = [
   {
@@ -19,7 +20,7 @@ const experiences = [
     ],
     stack: ['Python', 'TensorFlow', 'Scikit-learn', 'Git', 'GitHub', 'Machine Learning'],
     accent: 'from-secondary to-secondary-light',
-    logoSrc: undefined, // Replace with official FlyRank AI logo URL when available
+    logo: <FlyRankLogo size={64} />,
   },
   {
     role: 'AI/ML Trainee Intern',
@@ -37,7 +38,7 @@ const experiences = [
     ],
     stack: ['C++', 'SQL', 'DSA', 'OOP', 'Debugging', 'Problem Solving', 'Database Design'],
     accent: 'from-primary to-primary-light',
-    logoSrc: undefined, // Replace with official Explorin Academy logo URL when available
+    logo: <ExplorinLogo size={64} />,
   },
 ];
 
@@ -74,13 +75,15 @@ const Experience = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="relative pl-14 md:pl-24 pb-12 last:pb-0"
+              className="relative pl-14 md:pl-24 pb-12 last:pb-0 group"
             >
               <div className={`absolute left-2.5 md:left-6 top-1 w-5 h-5 rounded-full bg-gradient-to-br ${exp.accent} border-4 border-ink-800 shadow-glow`} />
 
               <div className="glass rounded-[20px] p-8 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all">
                 <div className="flex items-start gap-4 mb-5">
-                  <CompanyLogo name={exp.company} src={exp.logoSrc} />
+                  <div className="glass-strong rounded-full p-1 flex-shrink-0 group-hover:scale-105 transition-transform">
+                    {exp.logo}
+                  </div>
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
                     <p className="text-lg font-semibold gradient-text mb-3">{exp.company}</p>
