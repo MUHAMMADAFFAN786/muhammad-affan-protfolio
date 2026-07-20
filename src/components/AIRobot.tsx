@@ -18,7 +18,7 @@ const AIRobot = () => {
   }, [active]);
 
   return (
-    <div className="fixed bottom-24 right-6 z-40 select-none">
+    <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-40 select-none">
       <div className="relative flex flex-col items-end gap-2">
         <AnimatePresence>
           {active && (
@@ -52,8 +52,8 @@ const AIRobot = () => {
           aria-label="AI Assistant"
           className="relative glass-strong rounded-2xl p-2 cursor-pointer"
           style={{
-            width: 76,
-            height: 76,
+            width: 56,
+            height: 56,
             boxShadow: hovering
               ? '0 0 24px rgba(59,130,246,0.45), 0 0 60px rgba(59,130,246,0.2)'
               : '0 4px 20px rgba(0,0,0,0.3)',

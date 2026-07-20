@@ -77,7 +77,7 @@ const Experience = () => {
             >
               <div className={`absolute left-2.5 md:left-6 top-1 w-5 h-5 rounded-full bg-gradient-to-br ${exp.accent} border-4 border-ink-800 shadow-glow`} />
 
-              <div className="glass rounded-[20px] p-8 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all">
+              <div className="glass rounded-[20px] p-6 sm:p-8 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all break-words overflow-hidden">
                 <div className="flex items-start gap-4 mb-5">
                   <div className="glass-strong rounded-full p-2 flex-shrink-0 group-hover:scale-105 transition-transform w-20 h-20 flex items-center justify-center bg-white">
                     <img
@@ -87,8 +87,8 @@ const Experience = () => {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
-                    <p className="text-lg font-semibold gradient-text mb-3">{exp.company}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">{exp.role}</h3>
+                    <p className="text-base sm:text-lg font-semibold gradient-text mb-3">{exp.company}</p>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-400">
                       <div className="flex items-center gap-1.5">
                         <MapPin size={15} />
