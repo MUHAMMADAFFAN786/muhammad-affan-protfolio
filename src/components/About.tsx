@@ -2,7 +2,6 @@ import { Code, Brain, Database, Wrench, Cpu, Layers, ExternalLink, Bot, Rocket, 
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import TechBadge from './TechBadge';
-import CoerLogo from './logos/CoerLogo';
 
 const Counter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -98,8 +97,12 @@ const About = () => {
             className="glass rounded-[20px] p-8 shadow-soft hover:shadow-glow transition-shadow"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 glass-strong rounded-2xl p-1.5 hover:scale-105 transition-transform">
-                <CoerLogo size={56} />
+              <div className="flex-shrink-0 glass-strong rounded-2xl p-1.5 hover:scale-105 transition-transform w-14 h-14 flex items-center justify-center bg-white">
+                <img
+                  src="/images/logos/Screenshot_2026-07-19_185414.png"
+                  alt="COER University"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white mb-1">

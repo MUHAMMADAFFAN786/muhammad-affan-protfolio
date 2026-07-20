@@ -1,4 +1,4 @@
-import { Github, Linkedin, MessageCircle, Sparkles, ExternalLink } from 'lucide-react';
+import { Github, Linkedin, MessageCircle, Sparkles, ExternalLink, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -134,23 +134,25 @@ const Hero = () => {
                   <img
                     src="/images/logos/Screenshot_2026-07-19_185414.png"
                     alt="COER University"
-                    className="w-10 h-10 object-contain rounded-full"
+                    className="w-11 h-11 object-contain rounded-full"
                   />
                 </a>
-                <p className="text-sm text-slate-300 font-medium whitespace-nowrap flex items-center gap-1.5">
-                  B.Tech Computer Science (AI &amp; ML) —
-                  <a
-                    href="https://coeruniversity.ac.in/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-slate-200 hover:text-primary-light underline-offset-2 hover:underline transition-colors whitespace-nowrap"
-                  >
-                    COER University
-                    <ExternalLink size={12} className="opacity-70" />
-                  </a>
-                </p>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm text-slate-300 font-medium whitespace-nowrap flex items-center gap-1.5">
+                    B.Tech Computer Science (AI &amp; ML) —
+                    <a
+                      href="https://coeruniversity.ac.in/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-slate-200 hover:text-primary-light underline-offset-2 hover:underline transition-colors whitespace-nowrap"
+                    >
+                      COER University
+                      <ExternalLink size={12} className="opacity-70" />
+                    </a>
+                  </p>
+                  <p className="text-xs text-slate-500">Roorkee, Uttarakhand, India</p>
+                </div>
               </div>
-              <p className="text-xs text-slate-500 mt-1.5 ml-[52px]">Roorkee, Uttarakhand, India</p>
             </div>
 
             <p className="text-base sm:text-lg text-slate-300 mb-9 max-w-2xl leading-relaxed">
@@ -176,10 +178,17 @@ const Hero = () => {
                 href="https://github.com/MUHAMMADAFFAN786"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-900 hover:scale-105 hover:shadow-lg transition-all"
+                className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-white/10 text-white px-6 py-3 rounded-xl font-semibold hover:bg-black/80 hover:scale-105 hover:shadow-lg transition-all"
               >
                 <Github size={18} />
                 GitHub
+              </a>
+              <a
+                href="mailto:malikaffan67802@gmail.com"
+                className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-white/10 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-950/60 hover:border-blue-500/40 hover:shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:scale-105 transition-all"
+              >
+                <Mail size={18} />
+                Email
               </a>
               <a
                 href="https://linkedin.com/in/muhammad-affan-25aa533fb"

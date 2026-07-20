@@ -10,7 +10,7 @@ const PUBLIC_KEY = 'your_public_key';
 
 const Contact = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -18,6 +18,7 @@ const Contact = () => {
     if (!formData.name.trim()) return 'Name is required';
     if (!formData.email.trim()) return 'Email is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Please enter a valid email';
+    if (!formData.subject.trim()) return 'Subject is required';
     if (!formData.message.trim()) return 'Message is required';
     if (formData.message.trim().length < 10) return 'Message must be at least 10 characters';
     return '';
@@ -38,33 +39,33 @@ const Contact = () => {
     try {
       // 1. Save to Supabase first
       const { error: supaErr } = await supabase
-        .from('contacts')
-        .insert([{ name: formData.name, email: formData.email, message: formData.message }]);
+        .from('contact_messages')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }]);
 
       if (supaErr) throw supaErr;
 
-      // 2. Send email via EmailJS
-      if (PUBLIC_KEY === 'your_public_key') {
-        // Fallback: open mail client so the form always works
-        const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
-        const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
-        window.location.href = `mailto:malikaffan67802@gmail.com?subject=${subject}&body=${body}`;
-      } else {
-        await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, { publicKey: PUBLIC_KEY });
+      // 2. Send email via EmailJS (optional, non-blocking)
+      if (PUBLIC_KEY !== 'your_public_key') {
+        try {
+          await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, { publicKey: PUBLIC_KEY });
+        } catch {
+          // Email notification is best-effort; Supabase save already succeeded
+        }
       }
 
       // 3. Success
       setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setStatus('idle'), 4000);
     } catch {
-      // Graceful fallback: never expose technical errors to visitors
-      const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
-      const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
-      window.location.href = `mailto:malikaffan67802@gmail.com?subject=${subject}&body=${body}`;
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 4000);
+      // Supabase save failed — show friendly error, do not clear the form
+      setStatus('error');
+      setErrorMsg('Something went wrong while sending your message. Please try again, or email me directly at malikaffan67802@gmail.com.');
     }
   };
 
@@ -201,6 +202,19 @@ const Contact = () => {
                     required
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                     placeholder="you@example.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-slate-300 mb-1.5">Subject</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                    placeholder="What's this about?"
                   />
                 </div>
                 <div>
