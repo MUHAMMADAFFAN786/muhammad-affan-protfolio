@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -10,15 +10,44 @@ import WhatsAppButton from './components/WhatsAppButton';
 import AIRobot from './components/AIRobot';
 import ScrollProgress from './components/ScrollProgress';
 import MouseFollower from './components/MouseFollower';
+import Admin from './components/admin/Admin';
+
+function useHashRoute() {
+  const [route, setRoute] = useState(() => window.location.hash);
+  useEffect(() => {
+    const onChange = () => setRoute(window.location.hash);
+    window.addEventListener('hashchange', onChange);
+    return () => window.removeEventListener('hashchange', onChange);
+  }, []);
+  return route;
+}
 
 function App() {
-  // Smooth scroll behavior for anchor navigation
+  const route = useHashRoute();
+  const isAdmin = route.startsWith('#/admin');
+
+  // Smooth scroll behavior for anchor navigation (portfolio only)
   useEffect(() => {
+    if (isAdmin) return;
     document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
       document.documentElement.style.scrollBehavior = '';
     };
-  }, []);
+  }, [isAdmin]);
+
+  const exitAdmin = () => {
+    if (window.location.hash.startsWith('#/admin')) {
+      window.location.hash = '';
+    }
+  };
+
+  if (isAdmin) {
+    return (
+      <div className="min-h-screen bg-ink-900">
+        <Admin onExit={exitAdmin} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-ink-900">
