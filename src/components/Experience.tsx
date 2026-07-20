@@ -1,7 +1,5 @@
 import { MapPin, Calendar, Rocket, Wrench } from 'lucide-react';
 import { motion } from 'framer-motion';
-import FlyRankLogo from './logos/FlyRankLogo';
-import ExplorinLogo from './logos/ExplorinLogo';
 
 const experiences = [
   {
@@ -20,7 +18,7 @@ const experiences = [
     ],
     stack: ['Python', 'TensorFlow', 'Scikit-learn', 'Git', 'GitHub', 'Machine Learning'],
     accent: 'from-secondary to-secondary-light',
-    logo: <FlyRankLogo size={64} />,
+    logoSrc: '/images/logos/Screenshot_2026-07-19_185306.png',
   },
   {
     role: 'AI/ML Trainee Intern',
@@ -38,7 +36,7 @@ const experiences = [
     ],
     stack: ['C++', 'SQL', 'DSA', 'OOP', 'Debugging', 'Problem Solving', 'Database Design'],
     accent: 'from-primary to-primary-light',
-    logo: <ExplorinLogo size={64} />,
+    logoSrc: '/images/logos/Screenshot_2026-07-19_185348.png',
   },
 ];
 
@@ -81,8 +79,12 @@ const Experience = () => {
 
               <div className="glass rounded-[20px] p-8 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all">
                 <div className="flex items-start gap-4 mb-5">
-                  <div className="glass-strong rounded-full p-1 flex-shrink-0 group-hover:scale-105 transition-transform">
-                    {exp.logo}
+                  <div className="glass-strong rounded-full p-2 flex-shrink-0 group-hover:scale-105 transition-transform w-20 h-20 flex items-center justify-center bg-white">
+                    <img
+                      src={exp.logoSrc}
+                      alt={`${exp.company} logo`}
+                      className="w-full h-full object-contain p-1.5"
+                    />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>

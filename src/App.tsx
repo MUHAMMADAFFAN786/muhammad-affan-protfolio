@@ -10,7 +10,6 @@ import WhatsAppButton from './components/WhatsAppButton';
 import AIRobot from './components/AIRobot';
 import ScrollProgress from './components/ScrollProgress';
 import MouseFollower from './components/MouseFollower';
-import AIEcosystem from './components/AIEcosystem';
 
 function App() {
   // Smooth scroll behavior for anchor navigation
@@ -29,7 +28,6 @@ function App() {
       <main>
         <Hero />
         <About />
-        <AIEcosystem />
         <Experience />
         <Projects />
         <Contact />

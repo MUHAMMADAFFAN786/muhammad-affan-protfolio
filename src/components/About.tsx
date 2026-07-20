@@ -1,4 +1,4 @@
-import { Code, Brain, Database, Wrench, Cpu, Layers, ExternalLink } from 'lucide-react';
+import { Code, Brain, Database, Wrench, Cpu, Layers, ExternalLink, Bot, Rocket, Cloud } from 'lucide-react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import TechBadge from './TechBadge';
@@ -175,6 +175,69 @@ const About = () => {
                 <div className="flex flex-wrap gap-2">
                   {data.items.map((skill) => (
                     <TechBadge key={skill} name={skill} />
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* AI Tools & Development Ecosystem — embedded inside About */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="mt-20"
+        >
+          <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">
+            AI Tools &amp; <span className="gradient-text">Development Ecosystem</span>
+          </h3>
+          <p className="text-lg text-slate-400 max-w-3xl mb-8">
+            The platforms and tools I use to build, deploy, and ship AI-powered products end-to-end.
+          </p>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: 'AI & Development',
+                icon: <Bot className="w-5 h-5" />,
+                accent: 'from-primary to-primary-light',
+                items: [
+                  'Bolt.new', 'Lovable', 'Emergent', 'CrewAI', 'Replit AI', 'Gamma',
+                  'n8n', 'Hugging Face', 'Git', 'GitHub', 'Canva',
+                  'VS Code', 'Jupyter Notebook',
+                ],
+              },
+              {
+                title: 'Design Arena',
+                icon: <Rocket className="w-5 h-5" />,
+                accent: 'from-secondary to-secondary-light',
+                items: ['Canva', 'Figma', 'Gamma', 'Adobe Express'],
+              },
+              {
+                title: 'Deployment',
+                icon: <Cloud className="w-5 h-5" />,
+                accent: 'from-success to-success-light',
+                items: ['Vercel', 'Netlify', 'AWS', 'Bolt Hosting'],
+              },
+            ].map((group, gi) => (
+              <motion.div
+                key={group.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: gi * 0.1 }}
+                className="glass rounded-[20px] p-7 shadow-soft hover:-translate-y-1 hover:shadow-glow transition-all"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className={`bg-gradient-to-br ${group.accent} p-2.5 rounded-xl text-white`}>
+                    {group.icon}
+                  </div>
+                  <h4 className="font-bold text-white text-lg">{group.title}</h4>
+                </div>
+                <div className="flex flex-wrap gap-2.5">
+                  {group.items.map((name) => (
+                    <TechBadge key={name} name={name} size="md" />
                   ))}
                 </div>
               </motion.div>

@@ -122,19 +122,36 @@ const Hero = () => {
                 <span className="inline-block w-1 h-6 ml-1 bg-primary-light animate-pulse align-middle" />
               </h2>
             </div>
-            <p className="text-sm text-slate-400 font-medium mb-6 flex items-center gap-1.5">
-              B.Tech Computer Science (AI &amp; ML) —
-              <a
-                href="https://coeruniversity.ac.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-slate-300 hover:text-primary-light underline-offset-2 hover:underline transition-colors"
-              >
-                COER University
-                <ExternalLink size={12} className="opacity-70" />
-              </a>
-              <span className="block w-full text-xs text-slate-500 mt-1">Roorkee, Uttarakhand, India</span>
-            </p>
+            <div className="mb-6">
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://coeruniversity.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 rounded-full overflow-hidden bg-white p-1 hover:scale-105 transition-transform"
+                  aria-label="COER University"
+                >
+                  <img
+                    src="/images/logos/Screenshot_2026-07-19_185414.png"
+                    alt="COER University"
+                    className="w-10 h-10 object-contain rounded-full"
+                  />
+                </a>
+                <p className="text-sm text-slate-300 font-medium whitespace-nowrap flex items-center gap-1.5">
+                  B.Tech Computer Science (AI &amp; ML) —
+                  <a
+                    href="https://coeruniversity.ac.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-slate-200 hover:text-primary-light underline-offset-2 hover:underline transition-colors whitespace-nowrap"
+                  >
+                    COER University
+                    <ExternalLink size={12} className="opacity-70" />
+                  </a>
+                </p>
+              </div>
+              <p className="text-xs text-slate-500 mt-1.5 ml-[52px]">Roorkee, Uttarakhand, India</p>
+            </div>
 
             <p className="text-base sm:text-lg text-slate-300 mb-9 max-w-2xl leading-relaxed">
               Passionate AI &amp; Machine Learning Engineer focused on building intelligent systems using

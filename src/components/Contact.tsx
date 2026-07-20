@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { supabase } from '../lib/supabase';
 
 const SERVICE_ID = 'service_portfolio';
 const TEMPLATE_ID = 'template_contact';
@@ -35,18 +36,24 @@ const Contact = () => {
     setErrorMsg('');
 
     try {
+      // 1. Save to Supabase first
+      const { error: supaErr } = await supabase
+        .from('contacts')
+        .insert([{ name: formData.name, email: formData.email, message: formData.message }]);
+
+      if (supaErr) throw supaErr;
+
+      // 2. Send email via EmailJS
       if (PUBLIC_KEY === 'your_public_key') {
         // Fallback: open mail client so the form always works
         const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
         const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
         window.location.href = `mailto:malikaffan67802@gmail.com?subject=${subject}&body=${body}`;
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setStatus('idle'), 4000);
-        return;
+      } else {
+        await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, { publicKey: PUBLIC_KEY });
       }
 
-      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, { publicKey: PUBLIC_KEY });
+      // 3. Success
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setStatus('idle'), 4000);

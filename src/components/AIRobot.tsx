@@ -126,6 +126,3 @@ const AIRobot = () => {
 };
 
 export default AIRobot;
-
-
-export default AIRobot
