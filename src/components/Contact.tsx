@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { supabase } from '../lib/supabase';
@@ -245,6 +245,23 @@ const Contact = () => {
             )}
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex justify-center mt-12"
+        >
+          <button
+            onClick={() => { window.location.hash = '/admin'; }}
+            className="flex items-center gap-2 glass px-5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:border-primary/40 border border-white/10 transition-all group"
+            aria-label="Admin Access"
+          >
+            <Shield className="w-4 h-4 group-hover:text-primary-light transition-colors" />
+            Admin Access
+          </button>
+        </motion.div>
       </div>
     </section>
   );
