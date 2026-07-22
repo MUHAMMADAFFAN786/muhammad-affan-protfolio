@@ -7,9 +7,10 @@ import { ADMIN_EMAIL } from '../../lib/auth';
 interface Props {
   onSuccess: () => void;
   onBack: () => void;
+  denied: boolean;
 }
 
-const AdminLogin = ({ onSuccess, onBack }: Props) => {
+const AdminLogin = ({ onSuccess, onBack, denied }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,10 +70,10 @@ const AdminLogin = ({ onSuccess, onBack }: Props) => {
           <p className="text-slate-400 text-sm mt-1.5">Sign in to manage contact messages</p>
         </div>
 
-        {error && (
+        {(error || denied) && (
           <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-xl mb-5">
             <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-red-300 text-sm">{error}</p>
+            <p className="text-red-300 text-sm">{denied ? 'Access Denied' : error}</p>
           </div>
         )}
 

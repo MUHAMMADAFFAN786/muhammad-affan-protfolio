@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Admin = ({ onExit }: Props) => {
-  const { loading, isAdmin } = useAuth();
+  const { loading, isAdmin, denied } = useAuth();
 
   if (loading) {
     return (
@@ -21,7 +21,7 @@ const Admin = ({ onExit }: Props) => {
   return isAdmin ? (
     <AdminDashboard onLogout={onExit} onBack={onExit} />
   ) : (
-    <AdminLogin onSuccess={onExit} onBack={onExit} />
+    <AdminLogin onSuccess={onExit} onBack={onExit} denied={denied} />
   );
 };
 

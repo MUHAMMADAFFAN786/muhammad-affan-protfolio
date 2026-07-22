@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Mail, Trash2, CheckCircle2, Circle, LogOut, ArrowLeft,
-  Inbox, MailOpen, Loader2, X, Calendar, AlertCircle, RefreshCw,
+  Inbox, MailOpen, MailCheck, Loader2, X, Calendar, AlertCircle, RefreshCw,
+  Clock,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -21,13 +22,15 @@ interface Props {
   onBack: () => void;
 }
 
+type FilterType = 'all' | 'unread' | 'read';
+
 const AdminDashboard = ({ onLogout, onBack }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Message | null>(null);
-  const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -73,6 +76,7 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
 
   const filtered = messages.filter((m) => {
     if (filter === 'unread' && m.is_read) return false;
+    if (filter === 'read' && !m.is_read) return false;
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return (
@@ -84,6 +88,8 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
   });
 
   const unreadCount = messages.filter((m) => !m.is_read).length;
+  const readCount = messages.filter((m) => m.is_read).length;
+  const latestMessages = [...messages].slice(0, 5);
 
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleString('en-US', {
@@ -135,7 +141,7 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,7 +170,66 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
             </div>
             <p className="text-3xl sm:text-4xl font-bold text-white">{unreadCount}</p>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass rounded-2xl p-5 sm:p-6"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <div className="bg-secondary/20 p-2.5 rounded-xl">
+                <MailCheck className="w-5 h-5 text-secondary-light" />
+              </div>
+              <span className="text-sm text-slate-400 font-medium">Read</span>
+            </div>
+            <p className="text-3xl sm:text-4xl font-bold text-white">{readCount}</p>
+          </motion.div>
         </div>
+
+        {/* Latest Messages */}
+        {latestMessages.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <Clock className="w-4 h-4 text-primary-light" />
+              <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Latest Messages</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {latestMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`glass rounded-2xl p-4 hover:shadow-soft transition-all cursor-pointer ${
+                    !msg.is_read ? 'border-l-4 border-l-primary' : ''
+                  }`}
+                  onClick={() => {
+                    setSelected(msg);
+                    if (!msg.is_read) markAsRead(msg.id);
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    {msg.is_read ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
+                    ) : (
+                      <Circle className="w-3.5 h-3.5 text-primary-light flex-shrink-0" />
+                    )}
+                    <h3 className="font-semibold text-white text-sm truncate">{msg.subject}</h3>
+                  </div>
+                  <p className="text-xs text-slate-300 truncate">
+                    <span className="font-medium">{msg.name}</span>
+                    <span className="text-slate-500"> · {msg.email}</span>
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1.5 line-clamp-2">{msg.message}</p>
+                  <p className="text-xs text-slate-500 mt-2">{formatDate(msg.created_at)}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -198,6 +263,16 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
               }`}
             >
               Unread
+            </button>
+            <button
+              onClick={() => setFilter('read')}
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                filter === 'read'
+                  ? 'bg-gradient-to-r from-primary to-secondary text-white'
+                  : 'glass text-slate-300 hover:text-white'
+              }`}
+            >
+              Read
             </button>
           </div>
         </div>
@@ -302,9 +377,9 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
               </div>
 
               <div className="space-y-4">
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   <div>
-                    <p className="text-slate-500 text-xs mb-0.5">From</p>
+                    <p className="text-slate-500 text-xs mb-0.5">Name</p>
                     <p className="text-white font-medium">{selected.name}</p>
                   </div>
                   <div>
@@ -312,6 +387,10 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
                     <a href={`mailto:${selected.email}`} className="text-primary-light hover:underline break-all">
                       {selected.email}
                     </a>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-xs mb-0.5">Subject</p>
+                    <p className="text-slate-200">{selected.subject}</p>
                   </div>
                   <div>
                     <p className="text-slate-500 text-xs mb-0.5">Date</p>
@@ -323,7 +402,7 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
                 </div>
 
                 <div className="border-t border-white/10 pt-4">
-                  <p className="text-slate-500 text-xs mb-2">Message</p>
+                  <p className="text-slate-500 text-xs mb-2">Full Message</p>
                   <p className="text-slate-200 whitespace-pre-wrap leading-relaxed">{selected.message}</p>
                 </div>
 
@@ -345,13 +424,18 @@ const AdminDashboard = ({ onLogout, onBack }: Props) => {
                     </button>
                   )}
                   <button
-                    onClick={() => {
-                      deleteMessage(selected.id);
-                    }}
+                    onClick={() => deleteMessage(selected.id)}
                     className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-300 hover:bg-red-500/20 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                   >
                     <Trash2 size={16} />
                     Delete
+                  </button>
+                  <button
+                    onClick={() => setSelected(null)}
+                    className="flex items-center gap-2 glass text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                  >
+                    <X size={16} />
+                    Close
                   </button>
                 </div>
               </div>
