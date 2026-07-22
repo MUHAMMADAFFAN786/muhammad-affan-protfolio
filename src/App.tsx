@@ -11,6 +11,7 @@ import AIRobot from './components/AIRobot';
 import ScrollProgress from './components/ScrollProgress';
 import MouseFollower from './components/MouseFollower';
 import Admin from './components/admin/Admin';
+import AdminButton from './components/AdminButton';
 
 function useHashRoute() {
   const [route, setRoute] = useState(() => window.location.hash);
@@ -63,6 +64,7 @@ function App() {
       </main>
       <Footer />
       <AIRobot />
+      <AdminButton />
       <WhatsAppButton />
     </div>
   );
